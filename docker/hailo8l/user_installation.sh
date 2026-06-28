@@ -4,7 +4,8 @@
 sudo apt-get update
 sudo apt-get install -y build-essential cmake git wget linux-headers-$(uname -r)
 
-hailo_version="4.21.0"
+# hailo_version="4.21.0"
+hailo_version="4.18.0"
 arch=$(uname -m)
 
 if [[ $arch == "aarch64" ]]; then
