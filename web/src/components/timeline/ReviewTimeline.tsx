@@ -20,8 +20,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { TooltipPortal } from "@radix-ui/react-tooltip";
 
 export type ReviewTimelineProps = {
-  timelineRef: RefObject<HTMLDivElement>;
-  contentRef: RefObject<HTMLDivElement>;
+  timelineRef: RefObject<HTMLDivElement | null>;
+  contentRef: RefObject<HTMLDivElement | null>;
   segmentDuration: number;
   timelineDuration: number;
   timelineStartAligned: number;
@@ -343,9 +343,12 @@ export function ReviewTimeline({
 
   useEffect(() => {
     if (onHandlebarDraggingChange) {
-      onHandlebarDraggingChange(isDraggingHandlebar);
+      // Keep existing callback name but treat it as a generic dragging signal.
+      // This allows consumers (e.g. export-handle timelines) to correctly
+      // enable preview scrubbing while dragging export handles.
+      onHandlebarDraggingChange(isDragging);
     }
-  }, [isDraggingHandlebar, onHandlebarDraggingChange]);
+  }, [isDragging, onHandlebarDraggingChange]);
 
   const isHandlebarInNoRecordingPeriod = useMemo(() => {
     if (!getRecordingAvailability || handlebarTime === undefined) return false;
@@ -536,7 +539,7 @@ export function ReviewTimeline({
               </Button>
             </TooltipTrigger>
             <TooltipPortal>
-              <TooltipContent>{t("zoomIn")}</TooltipContent>
+              <TooltipContent>{t("zoomOut")}</TooltipContent>
             </TooltipPortal>
           </Tooltip>
           <Tooltip>
@@ -559,7 +562,7 @@ export function ReviewTimeline({
               </Button>
             </TooltipTrigger>
             <TooltipPortal>
-              <TooltipContent>{t("zoomOut")}</TooltipContent>
+              <TooltipContent>{t("zoomIn")}</TooltipContent>
             </TooltipPortal>
           </Tooltip>
         </div>
